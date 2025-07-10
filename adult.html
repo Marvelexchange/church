@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Schedule Selector</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-color: #172554;
+      --accent-color: #facc15;
+      --accent-hover: #e0b10f;
+      --dark-color: #1e293b;
+      --light-color: #fff8e7;
+      --text-color: #fff;
+      --font-family: 'Montserrat', sans-serif;
+      --transition: 0.4s ease;
+      --border-radius: 8px;
+      --shadow-color: rgba(0, 0, 0, 0.25);
+    }
+
+    body {
+      font-family: var(--font-family);
+      background: var(--primary-color);
+      color: var(--text-color);
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      width: 100%;
+      background: var(--light-color);
+      border-radius: var(--border-radius);
+      padding: 30px;
+      box-shadow: 0 6px 20px var(--shadow-color);
+      color: var(--primary-color);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 800;
+      color: var(--primary-color);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .item {
+      background: var(--accent-color);
+      padding: 15px;
+      border-radius: var(--border-radius);
+      text-align: center;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(250, 204, 21, 0.5);
+      transition: transform 0.2s ease, background 0.3s ease;
+    }
+
+    .item:hover {
+      background: var(--accent-hover);
+      transform: translateY(-4px);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .back-btn {
+      margin-bottom: 20px;
+      display: inline-block;
+      padding: 10px 20px;
+      background: var(--primary-color);
+      color: var(--accent-color);
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 700;
+      transition: background var(--transition);
+    }
+
+    .back-btn:hover {
+      background: var(--accent-hover);
+      color: var(--dark-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Select a Year</h1>
+
+    <div id="year-container" class="grid">
+      <!-- Years will be inserted here -->
+    </div>
+
+    <div id="month-section" class="hidden">
+      <span class="back-btn" onclick="goBackToYears()">← Back to Years</span>
+      <h1>Select a Month</h1>
+      <div id="month-container" class="grid"></div>
+    </div>
+
+    <div id="week-section" class="hidden">
+      <span class="back-btn" onclick="goBackToMonths()">← Back to Months</span>
+      <h1>Select a Week</h1>
+      <div id="week-container" class="grid"></div>
+    </div>
+  </div>
+
+  <script>
+    const years = [2025, 2026, 2027, 2028, 2029, 2030];
+    const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const weeks = ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5"];
+
+    const yearContainer = document.getElementById("year-container");
+    const monthContainer = document.getElementById("month-container");
+    const weekContainer = document.getElementById("week-container");
+
+    const monthSection = document.getElementById("month-section");
+    const weekSection = document.getElementById("week-section");
+
+    function showMonths(year) {
+      document.querySelector("h1").textContent = `Year: ${year}`;
+      yearContainer.classList.add("hidden");
+      monthSection.classList.remove("hidden");
+      monthContainer.innerHTML = "";
+      months.forEach((month) => {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.textContent = month;
+        div.onclick = () => showWeeks(year, month);
+        monthContainer.appendChild(div);
+      });
+    }
+
+    function showWeeks(year, month) {
+      document.querySelector("h1").textContent = `Month: ${month} (${year})`;
+      monthSection.classList.add("hidden");
+      weekSection.classList.remove("hidden");
+      weekContainer.innerHTML = "";
+      weeks.forEach((week) => {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.textContent = week;
+        weekContainer.appendChild(div);
+      });
+    }
+
+    function goBackToYears() {
+      monthSection.classList.add("hidden");
+      weekSection.classList.add("hidden");
+      document.querySelector("h1").textContent = "Select a Year";
+      yearContainer.classList.remove("hidden");
+    }
+
+    function goBackToMonths() {
+      weekSection.classList.add("hidden");
+      monthSection.classList.remove("hidden");
+      document.querySelector("h1").textContent = "Select a Month";
+    }
+
+    // Initialize year buttons
+    years.forEach((year) => {
+      const div = document.createElement("div");
+      div.className = "item";
+      div.textContent = year;
+      div.onclick = () => showMonths(year);
+      yearContainer.appendChild(div);
+    });
+  </script>
+</body>
+</html>
